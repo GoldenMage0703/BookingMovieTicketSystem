@@ -1,0 +1,19 @@
+﻿@page
+@model Web.Pages.Managers.Movies.EditMovieModel
+@{
+}
+
+<form method="post">
+    <input type="text" value="@Model.movie.Title" asp-for="movie.Title" />
+    <span asp-validation-for="@Model.movie.Title" class="text-danger"></span>
+    <br />
+    <input type="hidden" value="@Model.movie.ReleaseDate" />  <br />
+    <input type="hidden" value="@Model.movie.Duration" />  <br />
+    <textarea>@Model.movie.StoryLine</textarea>  <br />
+    <input type="file" value="@Model.movie.Poster" />  <br />
+    <input type="text" value="@Model.movie.DirectorName" />  <br />
+    <input type="number" value="@Model.movie.Rating" />  <br />
+    <input type="time" value="@Model.movie.Time" />  <br />
+    <input type="file" value="@Model.movie.Trailer" />  <br />
+    <input type="submit" value="ss"/>
+</form>

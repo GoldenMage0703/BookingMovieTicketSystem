@@ -1,0 +1,135 @@
+﻿@page
+@model Web.Pages.Managers.Movies.ManageMovieModel
+@{
+}
+<style>
+    /* Base table styling */
+    .table {
+        width: 100%;
+        margin-bottom: 1rem;
+        background-color: transparent;
+        border-collapse: collapse;
+    }
+
+        .table th, .table td {
+            padding: 0.75rem;
+            vertical-align: top;
+            border-top: 1px solid #dee2e6;
+        }
+
+        .table thead th {
+            vertical-align: bottom;
+            border-bottom: 2px solid #dee2e6;
+        }
+
+        .table tbody + tbody {
+            border-top: 2px solid #dee2e6;
+        }
+
+    /* Table variants */
+    .table-striped tbody tr:nth-of-type(odd) {
+        background-color: rgba(0, 0, 0, 0.05);
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: rgba(0, 0, 0, 0.075);
+    }
+
+    /* Table borders */
+    .table-bordered {
+        border: 1px solid #dee2e6;
+    }
+
+        .table-bordered th, .table-bordered td {
+            border: 1px solid #dee2e6;
+        }
+
+        .table-bordered thead th, .table-bordered thead td {
+            border-bottom-width: 2px;
+        }
+
+    /* Table size variations */
+    .table-sm th, .table-sm td {
+        padding: 0.3rem;
+    }
+
+    /* Table active and contextual classes */
+    .table-active, .table-active > th, .table-active > td {
+        background-color: rgba(0, 0, 0, 0.075);
+    }
+
+    .table-primary, .table-primary > th, .table-primary > td {
+        background-color: #cce5ff;
+    }
+
+    .table-secondary, .table-secondary > th, .table-secondary > td {
+        background-color: #e2e3e5;
+    }
+
+    .table-success, .table-success > th, .table-success > td {
+        background-color: #d4edda;
+    }
+
+    .table-danger, .table-danger > th, .table-danger > td {
+        background-color: #f8d7da;
+    }
+
+    .table-warning, .table-warning > th, .table-warning > td {
+        background-color: #fff3cd;
+    }
+
+    .table-info, .table-info > th, .table-info > td {
+        background-color: #d1ecf1;
+    }
+
+    .table-light, .table-light > th, .table-light > td {
+        background-color: #fefefe;
+    }
+
+    .table-dark, .table-dark > th, .table-dark > td {
+        background-color: #d6d8d9;
+    }
+</style>
+<form method="post" id="exportForm">
+    <input type="submit" value="Download Template" />
+</form>
+<table class="table table-striped table-bordered">
+    <thead>
+        <tr>
+            <th>Poster</th>
+            <th>Movie Name</th>
+            <th>Release Date</th>
+            <th>Duration</th>
+            <th>Rating</th>
+            <th>Edit</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Movie)
+        {
+            <tr>
+                <td>
+                    <img style="width:100px;height:150px" class="card-img-top" src="@Url.Content(item.Poster)" />
+                </td>
+                <td>@item.Title</td>
+                <td>@item.ReleaseDate</td>
+                <td>@item.Time</td>
+                <td>@item.Rating ⭐</td>
+                <td>
+                    <a asp-page="EditMovie" asp-route-moviedID="@item.MovieId">
+                        Edit
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+@section Scripts {
+    <script type="text/javascript">
+        document.getElementById("exportForm").onsubmit = function () {
+            var form = document.getElementById("exportForm");
+            form.action = "@Url.Page("/Managers/Movies/ManageMovie", new { handler = "Download" })";
+            form.submit();
+        };
+    </script>
+}

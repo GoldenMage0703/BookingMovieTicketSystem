@@ -1,0 +1,91 @@
+﻿@inject IHttpContextAccessor context;
+@using Microsoft.AspNetCore.Http
+@using Microsoft.AspNetCore.Razor.TagHelpers;
+@{
+    string currentViewPath = ViewContext.View.Path;
+}
+
+<header>
+   
+    @if (currentViewPath != "/Pages/Login.cshtml" && currentViewPath != "/Pages/Register.cshtml")
+    {
+        <nav class="navbar navbar-expand-md navbar-light" id="navbar_sticky">
+            <div class="container-xl">
+                <a class="navbar-brand fs-2 p-0 fw-bold text-black m-0 me-5" href="http://localhost:5017/Customers/HomePage">
+                    <i class="fa fa-youtube-play me-1 col_red"></i> Play Show
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav mb-0">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" asp-page="HomePage">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-page="ListMovie">Movies</a>
+                        </li>
+                        @if (context.HttpContext.Session.GetString("userName") != null)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" href="http://localhost:5017/Customers/MyCart">My Cart</a>
+                            </li>
+                        }
+                        
+
+
+                    </ul>
+                    <ul class="navbar-nav mb-0 ms-auto">
+                        @if (context.HttpContext.Session.GetString("userName") != null)
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle dropdown_search" href="#" id="navbarDropdown"
+                                   role="button" data-bs-toggle="dropdown" aria-expanded="true">
+                                    <i class="fa fa-bell-o"></i>
+                                </a>
+                                <ul class="dropdown-menu drop_1 drop_o drop_o1 p-0" aria-labelledby="navbarDropdown"
+                                    data-bs-popper="none">
+
+                                    <li class="p-1 pb-0">
+                                        <div class="row">
+                                            <div class="col-md-2 pe-0 col-2">
+                                                <i class="fa fa-circle col_red font_8"></i>
+                                            </div>
+                                            <div class="col-md-10 ps-0 col-10">
+                                                <a class="fw-normal text-capitalize" href="http://localhost:5017/Logout">Logout</a><br>
+
+                                            </div>
+                                        </div>
+                                    </li>
+
+
+                                </ul>
+                            </li>
+                        }
+
+                        <li class="nav-item">
+                            @if (context.HttpContext.Session.GetString("userName") == null)
+                            {
+                                <a class="nav-link" href="http://localhost:5017/Login">
+                                    <i class="fa fa-user fs-4 align-middle me-1 lh-1 col_red">Login</i>
+                                </a>
+                            }
+                            else
+                            {
+                                <a class="nav-link" href="http://localhost:5017/Customers/UserProfile">
+                                    <i class="fa fa-user fs-4 align-middle me-1 lh-1 col_red">@context.HttpContext.Session.GetString("userName")</i>
+                                </a>
+                            }
+
+
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    }
+
+
+</header>

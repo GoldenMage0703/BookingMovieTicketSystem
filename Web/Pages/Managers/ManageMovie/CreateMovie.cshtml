@@ -1,0 +1,92 @@
+﻿@page
+@model CreateMovieModel
+@{
+}
+<h2 class="display-4">Create Movie</h2>
+
+<div class="mb-3">
+    <form method="post" id="exportForm" class="mb-3">
+        <input class="btn btn-primary" type="submit" value="Download Template" />
+    </form>
+
+    <form method="post" asp-page-handler="UploadXlss" enctype="multipart/form-data" class="mb-3">
+        <div class="custom-file">
+            <input name="ExcelFile" type="file" class="custom-file-input" id="ExcelFile">
+            <label class="custom-file-label" for="ExcelFile">Choose file</label>
+        </div>
+        <button type="submit" class="btn btn-success mt-2">Upload</button>
+    </form>
+
+    <form method="post" asp-page-handler="InsertAll">
+        <input class="btn btn-info" type="submit" value="Insert All" />
+    </form>
+</div>
+
+@if (Model.Movies != null && Model.Movies.Count > 0)
+{
+    <div class="table-responsive">
+        <table class="table table-striped table-hover">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Poster</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Release Date</th>
+                    <th scope="col">Duration (min)</th>
+                    <th scope="col">Storyline</th>
+                    <th scope="col">Director Name</th>
+                    <th scope="col">Rating</th>
+                    <th scope="col">Time</th>
+                    <th scope="col">Trailer</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Movies)
+                {
+                    <tr>
+                        <td><img src="@Url.Content(item.Poster)" class="img-thumbnail" style="width: 50px; height: 50px;" /></td>
+                        <td>@item.Title</td>
+                        <td>@item.ReleaseDate.ToString("yyyy-MM-dd")</td>
+                        <td>@item.Duration</td>
+                        <td>@item.StoryLine</td>
+                        <td>@item.DirectorName</td>
+                        <td>@item.Rating</td>
+                        <td>@item.Time</td>
+                        <td>@item.Trailer</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+@section Scripts {
+    <script src="~/js/signalr/dist/browser/signalr.js"></script>
+    <script src="~/js/signalr/dist/browser/sigwwww.js"></script>
+    <script type="text/javascript">
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById("exportForm").onsubmit = function (event) {
+                event.preventDefault();
+                var form = document.getElementById("exportForm");
+                form.action = "@Url.Page("/Managers/ManageMovie/ManageMovie", new { handler = "Download" })";
+                form.submit();
+            };
+
+            document.querySelector('.custom-file-input').addEventListener('change', function (e) {
+                var fileName = document.getElementById("ExcelFile").files[0].name;
+                var nextSibling = e.target.nextElementSibling
+                nextSibling.innerText = fileName
+            });
+
+            // Ensure that signalR is defined before using it
+            if (typeof signalR !== 'undefined') {
+                var connection = new signalR.HubConnectionBuilder()
+                    .withUrl("/abcd")
+                    .build();
+
+                // Use the connection as needed
+            } else {
+                console.error('SignalR is not defined');
+            }
+        });
+    </script>
+}

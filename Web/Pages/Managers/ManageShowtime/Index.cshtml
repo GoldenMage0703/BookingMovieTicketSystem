@@ -1,0 +1,76 @@
+﻿@page
+@model Web.Pages.Managers.ManageShowtime.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Showtime[0].StartTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Showtime[0].EndTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Showtime[0].Movie)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Showtime[0].Theater)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Showtime)
+        {
+            <tr data-start-time="@item.StartTime.ToString("yyyy-MM-dd")">
+                <td>
+                    @Html.DisplayFor(modelItem => item.StartTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EndTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Movie.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Theater.Name)
+                </td>
+                <td>
+                    @if(Model.date < item.StartTime)
+                    {
+                        <a class="edit-link" asp-page="./Edit" asp-route-id="@item.ShowtimeId">Edit</a>
+                    }
+                     
+                    <a asp-page="./Details" asp-route-id="@item.ShowtimeId">Details</a> |
+                    <a asp-page="./Delete" asp-route-id="@item.ShowtimeId">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var today = new Date();
+            today.setHours(0, 0, 0, 0); // Start of today
+
+            document.querySelectorAll('tr[data-start-time]').forEach(function (row) {
+                var startTime = new Date(row.getAttribute('data-start-time'));
+
+                if (startTime.toDateString() === today.toDateString()) {
+                    row.querySelector('.edit-link').style.display = 'none'; // Hide Edit link
+                }
+            });
+        });
+    </script>
+}

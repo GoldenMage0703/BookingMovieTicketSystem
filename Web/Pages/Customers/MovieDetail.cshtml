@@ -1,0 +1,111 @@
+﻿@page
+@model Web.Pages.Customers.MovieDetailModel
+@{
+}
+
+@if (Model.Movie != null)
+{
+    <section id="feature" class="p_3">
+        <div class="container-xl mt-4">
+            <div class="row justify-content-center">
+                <!-- Center the content horizontally -->
+                <div class="col-md-12">
+                    <figure class="effect-jazz mb-0">
+                        <video class="w-100" controls>
+                            <source src="@Url.Content(Model.Movie.Trailer)" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    </figure>
+                </div>
+            </div>
+        </div>
+        <div class="container-xl">
+            <div class="feature_1 row">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <img style="max-width: 100%; align-items:start" src="@Url.Content(Model.Movie.Poster)" alt="Movie Poster" />
+                            @if (Model.userToget != null)
+                            {
+                                <button class="btn btn-primary w-100 mt-2" data-toggle="modal" data-target="#theaterModal">Booking</button>
+                            }
+                          
+                        </div>
+
+                        <div class="feature_1l clearfix col-md-8">
+                            <h1>@Model.Movie.Title</h1>
+
+
+
+                            <div class="feature_1li1 row">
+                                <div class="col-md-6">
+                                    <div class="feature_1li1l clearfix">
+                                        <h4>Rating</h4>
+                                        <p>@Model.Movie.Rating⭐</p>
+                                        <h4>Director</h4>
+                                        <p>@Model.Movie.DirectorName</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="feature_1li1l clearfix">
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="mb-0">
+                                <h4>StoryLine</h4>
+                                <h5>@Model.Movie.StoryLine</h5>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Theater Selection Modal -->
+    <!-- Theater Selection Modal -->
+    <div class="modal fade" id="theaterModal" tabindex="-1" role="dialog" aria-labelledby="theaterModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="theaterModalLabel">Select Theater</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form method="post" asp-page-handler="ViewSeat" asp-route-movieIdToGet="@Model.Movie.MovieId">
+                        <div class="form-group">
+                            <label for="theaterSelect">Choose a Theater:</label>
+                            <select class="form-control" id="theaterSelect" asp-for="TheaterGet">
+                                @foreach (var item in Model.TheaterList)
+                                {
+                                    <option value="@item.TheatreId">@item.Name</option>
+                                }
+                            </select>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            @if (Model.TheaterList.Count != 0)
+                            {
+                                <input type="submit" value="View Seats" class="btn btn-primary" />
+                            }
+                          
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Bootstrap JS and dependencies (if not already included) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+}
+else
+{
+    <div>NotHave</div>
+}
+

@@ -1,0 +1,178 @@
+﻿@page
+@model Web.Pages.Customers.SeatSelectedModel
+@{
+    int totalSeats = Model.SelectedSeatList.Count;
+    int seatsPerRow = 8; // Adjust this value based on your layout
+}
+<style>
+    .layout_body {
+        background-color: #242333;
+        color: #fff;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        font-family: 'Lato', sans-serif;
+        margin: 0;
+    }
+
+    .movie-container select {
+        background-color: #fff;
+        border: 0;
+        border-radius: 5px;
+        font-size: 14px;
+        padding: 5px 15px;
+    }
+
+    .seat {
+        background-color: #444451;
+        height: 40px;
+        width: 48px;
+        margin: 3px;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+    }
+
+        .seat.selected {
+            background-color: #6feaf6;
+        }
+
+        .seat.occupied {
+            background-color: #fff;
+        }
+
+        .seat:hover:not(.occupied) {
+            cursor: pointer;
+            transform: scale(1.2);
+        }
+
+    .showcase {
+        background: rgba(0, 0, 0, 0.1);
+        padding: 5px 10px;
+        border-radius: 5px;
+        color: #777;
+    }
+
+    .screen {
+        background-color: #fff;
+        height: 150px;
+        margin: 15px 0;
+        transform: rotateX(-45deg);
+        box-shadow: 0 3px 10px rgba(255, 255, 255, 0.7);
+    }
+
+    p.text span {
+        color: #6feaf6;
+    }
+</style>
+<form method="post" asp-page-handler="AddToCart">
+    <div class="layout_body">
+        <div class="movie-container">
+            <label>Pick a movie:</label>
+            <select id="movie" asp-for="showtimeInCart" name="showtimeInCart">
+                @foreach (var item in Model.ShowTimeList)
+                {
+                    <option value="@item.ShowtimeId">@item.StartTime - @item.EndTime</option>
+                }
+            </select>
+           
+        </div>
+        
+        <ul class="showcase list-unstyled d-flex justify-content-between mb-4">
+            <li class="d-flex align-items-center mr-2">
+                <div class="seat"></div>
+                <small class="ml-2">N/A</small>
+            </li>
+            <li class="d-flex align-items-center mr-2">
+                <div class="seat selected"></div>
+                <small class="ml-2">Selected</small>
+            </li>
+            <li class="d-flex align-items-center">
+                <div class="seat occupied"></div>
+                <small class="ml-2">Occupied</small>
+            </li>
+        </ul>
+
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="screen mb-4 col-6 mx-auto"></div>
+            </div>
+
+            <div id="starsList">
+                @await Html.PartialAsync("_seatPartial", Model.SelectedSeatList)
+            </div>
+            <div class="row justify-content-center">
+                <input class="btn btn-primary w-50" type="submit" value="submit" />
+            </div>
+           
+
+        </div>
+
+        <p class="text mt-4">
+            You have selected <span id="count">0</span> seats for a price of $<span id="total">0</span>
+        </p>
+    </div>
+</form>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script>
+    function initializeSeatSelection() {
+        console.log("Initializing seat selection");
+        const seats = document.querySelectorAll('.seat');
+        document.getElementById('count').innerText = 0;
+        document.getElementById('total').innerText = 0;
+        if (seats.length === 0) {
+            console.error("No seats found.");
+        }
+        seats.forEach(seat => {
+            seat.addEventListener('click', () => {
+                if (!seat.classList.contains('occupied')) {
+                    seat.classList.toggle('selected');
+                    const input = seat.querySelector('.seatIDInCart');
+                    if (seat.classList.contains('selected')) {
+                        input?.removeAttribute('disabled');
+                    } else {
+                        input?.setAttribute('disabled', 'disabled');
+                    }
+                    updateSelectedCount();
+                }
+            });
+        });
+
+        function updateSelectedCount() {
+            const selectedSeats = document.querySelectorAll('.seat.selected');
+            const count = selectedSeats.length;
+            document.getElementById('count').innerText = count - 1;
+            document.getElementById('total').innerText = (count - 1) * 10; // Assuming each seat costs $10
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', (event) => {
+        console.log("DOM fully loaded and parsed");
+        // Assuming each seat costs $10
+        initializeSeatSelection();
+    });
+
+    $(document).ready(function () {
+        $('#movie').change(function () {
+            var selectedShowtimeId = $(this).val();
+            console.log('Selected Showtime ID:', selectedShowtimeId);
+            $.ajax({
+                url: '@Url.Page("SeatSelected", "SeatByShowTime")',
+                type: 'GET',
+                data: { showtimeIDtoGetSeat: selectedShowtimeId },
+                success: function (result) {
+                    console.log('AJAX Success:', result);
+                    $('#starsList').html(result);
+                    initializeSeatSelection(); // Reinitialize after AJAX success
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error loading seats:', status, error);
+                    alert('Error loading seats.');
+                }
+            });
+        });
+    });
+</script>
+<script src="~/js/signalr/dist/browser/signalr.min.js"></script>
+<script src="~/js/signalr/dist/browser/signalr.js"></script><script src="~/js/signalr/dist/browser/sigwwww.js"></script>

@@ -1,0 +1,78 @@
+﻿@page
+@model Web.Pages.RegisterModel
+@{
+}
+<section class="vh-100">
+    <div class="container py-5 h-100">
+        <div class="row d-flex align-items-center justify-content-center h-100">
+            <div class="col-md-8 col-lg-7 col-xl-6">
+                <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.svg"
+                     class="img-fluid" alt="Phone image">
+            </div>
+            <div class="col-md-7 col-lg-5 col-xl-5 offset-xl-1">
+                <form id="registrationForm" method="post">
+                    <!-- First Name input -->
+                    <div data-mdb-input-init class="form-outline mb-4">
+                        <input type="text" id="firstName" class="form-control form-control-lg" asp-for="FirstName" />
+                        <label class="form-label" for="firstName">First Name</label>
+                        <div id="firstNameError" class="text-danger"></div>
+                    </div>
+
+                    <!-- Last Name input -->
+                    <div data-mdb-input-init class="form-outline mb-4">
+                        <input type="text" id="lastName" class="form-control form-control-lg" asp-for="LastName" />
+                        <label class="form-label" for="lastName">Last Name</label>
+                        <div id="lastNameError" class="text-danger"></div>
+                    </div>
+
+                    <!-- Email input -->
+                    <div data-mdb-input-init class="form-outline mb-4">
+                        <input type="email" id="email" class="form-control form-control-lg" asp-for="UserName" />
+                        <label class="form-label" for="email">Email address</label>
+                        <div id="emailError" class="text-danger"></div>
+                    </div>
+
+                    <!-- Password input -->
+                    <div data-mdb-input-init class="form-outline mb-4">
+                        <input type="password" id="password" class="form-control form-control-lg" asp-for="Password" />
+                        <label class="form-label" for="password">Password</label>
+                        <div id="passwordError" class="text-danger"></div>
+                    </div>
+
+                    <!-- Confirm Password input -->
+                    <div data-mdb-input-init class="form-outline mb-4">
+                        <input type="password" id="confirmPassword" class="form-control form-control-lg" asp-for="ConfirmPassword" />
+                        <label class="form-label" for="confirmPassword">Confirm Password</label>
+                        <div id="confirmPasswordError" class="text-danger"></div>
+                    </div>
+
+                    <!-- Phone input -->
+                    <div data-mdb-input-init class="form-outline mb-4">
+                        <input type="text" id="phone" class="form-control form-control-lg" asp-for="Phone" />
+                        <label class="form-label" for="phone">Phone</label>
+                        <div id="phoneError" class="text-danger"></div>
+                    </div>
+
+                    <!-- Address input -->
+                    <div data-mdb-input-init class="form-outline mb-4">
+                        <input type="text" id="address" class="form-control form-control-lg" asp-for="Address" />
+                        <label class="form-label" for="address">Address</label>
+                        <div id="addressError" class="text-danger"></div>
+                    </div>
+                    @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+                    {
+                        <div class="alert alert-danger" role="alert">
+                            @Model.ErrorMessage
+                        </div>
+                    }
+                    <!-- Submit button -->
+                    <button type="submit" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-lg btn-block col-12">Register</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script src="~/js/register.js"></script>
+}

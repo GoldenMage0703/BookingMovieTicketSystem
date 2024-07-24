@@ -1,0 +1,99 @@
+﻿@page
+@model Web.Pages.Customers.ListMovieModel
+@{
+    ViewData["Title"] = "Movies List";
+}
+<style>
+    a {
+        text-decoration: none;
+    }
+
+    .card-title, .card-text {
+        text-decoration: none;
+    }
+
+    .card {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+
+    .card-body {
+        flex: 1 1 auto;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .card img {
+        height: auto;
+        max-width: 100%;
+    }
+
+    .card-text, .card-title {
+        margin: 0;
+    }
+
+    .btn {
+        margin-top: auto;
+    }
+</style>
+
+<div class="container">
+    <div class="row mb-3">
+        <form method="get" class="col-md-12">
+            <div class="input-group">
+                <input type="text" name="searchString" value="@Model.SearchString" class="form-control" placeholder="Search by title...">
+                <select name="sortOrder" class="form-select">
+                    <option value="title_asc">Title (A-Z)</option>
+                    <option value="title_desc">Title (Z-A)</option>
+                    <option value="rating_asc" >Rating (Low-High)</option>
+                    <option value="rating_desc" >Rating (High-Low)</option>
+                </select>
+                <button class="btn btn-primary" type="submit">Search & Sort</button>
+            </div>
+        </form>
+    </div>
+    <div class="row mb-3">
+        @foreach (var item in Model.Mov)
+        {
+            <div class="col-md-3 d-flex align-items-stretch mt-3">
+                <a asp-page="MovieDetail" asp-route-id="@item.MovieId.ToString()">
+                    <div class="card mt-4">
+                        <img src="@Url.Content(item.Poster)" class="card-img-top" alt="Movie Poster">
+                        <div class="card-body">
+                            <h3 class="card-title text-center">@item.Title</h3>
+                            <p class="card-text text-center">@item.Time mins</p>
+                            <button class="btn btn-primary mt-auto">View Detail</button>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        }
+    </div>
+
+    <!-- Pagination -->
+    <nav aria-label="Page navigation" class="mt-5">
+        <ul class="pagination justify-content-center">
+            @if (Model.PageNumber > 1)
+            {
+                <li class="page-item">
+                    <a class="page-link" asp-page="./ListMovie" asp-route-pageNumber="@(Model.PageNumber - 1)" asp-route-searchString="@Model.SearchString" asp-route-sortOrder="@Model.SortOrder">Previous</a>
+                </li>
+            }
+
+            @for (int i = 1; i <= Model.TotalPages; i++)
+            {
+                <li class="page-item @(i == Model.PageNumber ? "active" : "")">
+                    <a class="page-link" asp-page="./ListMovie" asp-route-pageNumber="@i" asp-route-searchString="@Model.SearchString" asp-route-sortOrder="@Model.SortOrder">@i</a>
+                </li>
+            }
+
+            @if (Model.PageNumber < Model.TotalPages)
+            {
+                <li class="page-item">
+                    <a class="page-link" asp-page="./ListMovie" asp-route-pageNumber="@(Model.PageNumber + 1)" asp-route-searchString="@Model.SearchString" asp-route-sortOrder="@Model.SortOrder">Next</a>
+                </li>
+            }
+        </ul>
+    </nav>
+</div>

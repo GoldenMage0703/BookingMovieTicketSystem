@@ -1,0 +1,136 @@
+﻿@page
+@model Web.Pages.Customers.MyCartModel
+@{
+}
+
+<section class="h-100 h-custom" style="background-color: #fffff;">
+    <div class="container py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col">
+                <div class="card">
+                    <div class="card-body p-4">
+                        <div class="row">
+                            <div class="col-lg-7">
+                                <hr>
+                                <div class="d-flex justify-content-between align-items-center mb-4">
+                                    <div>
+                                        <p class="mb-1">Shopping cart</p>
+                                        <p class="mb-0">You have @Model.ItemInCar.Count items in your cart</p>
+                                    </div>
+                                    <div>
+                                        <p class="mb-0">
+                                            <span class="text-muted">Sort by:</span> <a href="#!"
+                                                                                        class="text-body">price <i class="fas fa-angle-down mt-1"></i></a>
+                                        </p>
+                                    </div>
+                                </div>
+
+                                @if (Model.ItemInCar != null && Model.ItemInCar.Count > 0)
+                                {
+                                    @foreach (var item in Model.ItemInCar.Values)
+                                    {
+                                        <div class="card mb-3 mb-lg-0">
+                                            <div class="card-body">
+                                                <div class="d-flex justify-content-between">
+                                                    <div class="d-flex flex-row align-items-center">
+                                                        <div>
+                                                            <img src="@Url.Content(item.Showtime.Movie.Poster)"
+                                                                 class="" alt="Shopping item"
+                                                                 style="width: 100px; height:150px;">
+                                                        </div>
+                                                        <div class="ms-3">
+                                                            <h5>@item.Showtime.Movie.Title</h5>
+                                                            <p class="small mb-0">@item.Showtime.Theater.Name</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="d-flex flex-row align-items-center">
+
+                                                        <div class="ms-3">
+                                                            <h5>Date: @item.Showtime.StartTime.ToString("yyyy/MM/dd") </h5>
+                                                            <p class="small mb-0">Time: @item.Showtime.StartTime.ToString("h tt")-@item.Showtime.EndTime.ToString("h tt")</p>
+                                                            <p class="small mb-0">Seat: @item.Seat.RowNum@item.Seat.SeatNum </p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="d-flex flex-row align-items-center">
+
+                                                        <div style="width: 80px;">
+                                                            <h5 class="mb-0">@item.Seat.Price</h5>
+                                                        </div>
+                                                        <a href="#!" style="color: #cecece;">
+                                                            <i class="fas fa-trash-alt"></i>
+                                                        </a>
+                                                    </div>
+                                                    <form method="post" asp-page-handler="RemoveFromCart">
+                                                        <input type="hidden" name="seatID" value="@item.Seat.SeatId" />
+                                                        <input type="hidden" name="showID" value="@item.Showtime.ShowtimeId" />
+                                                        <button type="submit" class="btn btn-danger">Remove</button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                }
+                            </div>
+                            <div class="col-lg-5">
+                                <form method="post" asp-page-handler="AddToCart">
+                                    <div class="card bg-primary text-white rounded-3">
+                                        <div class="card-body">
+                                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                                <h5 class="mb-0">Card details</h5>
+                                                <img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-6.webp"
+                                                     class="img-fluid rounded-3" style="width: 45px;" alt="Avatar">
+                                            </div>
+
+                                            <div data-mdb-input-init class="form-outline form-white mb-4">
+                                                <input type="text" id="typeName" asp-for="Name"
+                                                       class="form-control form-control-lg" siez="17"
+                                                       placeholder="Cardholder's Name" />
+                                                <label class="form-label" for="typeName">Full Name</label>
+                                            </div>
+
+                                            <div data-mdb-input-init class="form-outline form-white mb-4">
+                                                <input type="text" id="typeText"
+                                                       asp-for="Phone"
+                                                       class="form-control form-control-lg" siez="17" />
+                                                <label class="form-label" for="typeText">Phone</label>
+                                            </div>
+
+                                            <hr class="my-4">
+                                            <div class="d-flex justify-content-between mb-4">
+                                                <p class="mb-2">Total</p>
+                                                <p class="mb-2">@Model.Count</p>
+                                            </div>
+
+                                            <input type="submit" value="Checkout" class="btn btn-info btn-block btn-lg">
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@if (!string.IsNullOrEmpty(Model.SuccessMessage))
+{
+    <div id="success-popup" class="alert alert-success" role="alert">
+        @Model.SuccessMessage
+    </div>
+}
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var successPopup = document.getElementById("success-popup");
+        if (successPopup) {
+            setTimeout(function () {
+                successPopup.style.display = "none";
+            }, 3000); // 3 seconds
+        }
+    });
+</script>
+<script src="~/js/signalr/dist/browser/signalr.min.js"></script>
+<script src="~/js/signalr/dist/browser/signalr.js"></script>
+<script src="~/js/signalr/dist/browser/sigwwww.js"></script>

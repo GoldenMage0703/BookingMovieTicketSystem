@@ -1,0 +1,33 @@
+﻿@model List<DTO.Models.Movie>
+
+<table>
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>ReleaseDate</th>
+            <th>Duration</th>
+            <th>StoryLine</th>
+            <th>Poster</th>
+            <th>DirectorName</th>
+            <th>Rating</th>
+            <th>Time</th>
+            <th>Trailer</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Title</td>
+                <td>@item.ReleaseDate</td>
+                <td>@item.Duration</td>
+                <td>@item.StoryLine</td>
+                <td>@item.Poster</td>
+                <td>@item.DirectorName</td>
+                <td>@item.Rating</td>
+                <td>@item.Time</td>
+                <td>@item.Trailer</td>
+            </tr>
+        }
+    </tbody>
+</table>

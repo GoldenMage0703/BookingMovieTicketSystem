@@ -1,0 +1,92 @@
+﻿@model List<DTO.DisplayObject.SeatStatus>
+@{
+    int totalSeats = Model.Count;
+    int seatsPerRow = 8; // Adjust this value based on your layout
+}
+
+<style>
+    .layout_body {
+        background-color: #242333;
+        color: #fff;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        font-family: 'Lato', sans-serif;
+        margin: 0;
+    }
+
+    .movie-container select {
+        background-color: #fff;
+        border: 0;
+        border-radius: 5px;
+        font-size: 14px;
+        padding: 5px 15px;
+    }
+
+    .seat {
+        background-color: #444451;
+        height: 40px;
+        width: 48px;
+        margin: 3px;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+    }
+
+        .seat.selected {
+            background-color: #6feaf6;
+        }
+
+        .seat.occupied {
+            background-color: #fff;
+        }
+
+        .seat:hover:not(.occupied) {
+            cursor: pointer;
+            transform: scale(1.2);
+        }
+
+    .showcase {
+        background: rgba(0, 0, 0, 0.1);
+        padding: 5px 10px;
+        border-radius: 5px;
+        color: #777;
+    }
+
+    .screen {
+        background-color: #fff;
+        height: 150px;
+        margin: 15px 0;
+        transform: rotateX(-45deg);
+        box-shadow: 0 3px 10px rgba(255, 255, 255, 0.7);
+    }
+
+    p.text span {
+        color: #6feaf6;
+    }
+</style>
+@for (int i = 0; i < totalSeats / seatsPerRow; i++)
+{
+    <div class="row justify-content-center mb-2">
+        @for (int j = 0; j < seatsPerRow; j++)
+        {
+            int index = i * seatsPerRow + j;
+            if (index < totalSeats)
+            {
+                if (Model[index].IsBooking == false)
+                {
+                    <div id="seat-@index" class="seat">
+                        @Model[index].RowNum@Model[index].SeatNum
+                        <input value="@Model[index].SeatId" hidden class="seatIDInCart" disabled name="seatIDInCart" />
+                    </div>
+                }
+                else
+                {
+                    <div id="seat-@index" class="seat occupied">@Model[index].RowNum@Model[index].SeatNum</div>
+                }
+            }
+        }
+    </div>
+}
+
